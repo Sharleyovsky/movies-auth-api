@@ -7,9 +7,10 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     const swaggerConfig = new DocumentBuilder()
-        .addSecurity("basic", {
+        .addSecurity("bearer", {
             type: "http",
-            scheme: "basic",
+            scheme: "bearer",
+            bearerFormat: "JWT",
         })
         .setTitle("Movies API")
         .setVersion("0.1")
