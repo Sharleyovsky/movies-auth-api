@@ -12,8 +12,8 @@ async function bootstrap() {
             scheme: "bearer",
             bearerFormat: "JWT",
         })
-        .setTitle("Movies API")
-        .setVersion("0.1")
+        .setTitle(config.title)
+        .setVersion(config.version)
         .build();
     const document = SwaggerModule.createDocument(app, swaggerConfig);
 
