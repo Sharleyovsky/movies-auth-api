@@ -1,11 +1,12 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { config } from "./config/config";
+import { ConfigService } from "@nestjs/config";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    const configService = app.get(ConfigService);
     app.useGlobalPipes(new ValidationPipe());
 
     const swaggerConfig = new DocumentBuilder()
@@ -14,12 +15,12 @@ async function bootstrap() {
             scheme: "bearer",
             bearerFormat: "JWT",
         })
-        .setTitle(config.title)
-        .setVersion(config.version)
+        .setTitle(configService.get("title"))
+        .setVersion(configService.get("version"))
         .build();
     const document = SwaggerModule.createDocument(app, swaggerConfig);
 
     SwaggerModule.setup("swagger", app, document);
-    await app.listen(config.port);
+    await app.listen(configService.get("port"));
 }
 bootstrap();

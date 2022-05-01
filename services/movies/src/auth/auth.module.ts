@@ -1,14 +1,17 @@
 import { Module } from "@nestjs/common";
 import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
-import { config } from "../config/config";
 import { JwtStrategy } from "./strategies/jwt.strategy";
+import { ConfigService } from "@nestjs/config";
 
 @Module({
     imports: [
         PassportModule,
-        JwtModule.register({
-            secret: config.jwt,
+        JwtModule.registerAsync({
+            useFactory: async (configService: ConfigService) => ({
+                secret: configService.get("jwt"),
+            }),
+            inject: [ConfigService],
         }),
     ],
     providers: [JwtStrategy],
