@@ -1,11 +1,9 @@
-FROM node:14.15-alpine
+FROM node:18.0.0-alpine as build-server
 
-WORKDIR /app
+WORKDIR /auth
 
-COPY ./package.json ./package-lock.json ./
-RUN npm install
+COPY . /auth
 
-RUN mkdir ./src
-COPY ./src ./src
+RUN npm i --silent
 
-CMD ["node", "./src/server.js"]
+CMD ["npm", "start"]
