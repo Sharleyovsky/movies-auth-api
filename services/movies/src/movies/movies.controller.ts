@@ -55,16 +55,16 @@ export class MoviesController {
         @Request() req: UserRequest,
         @Body() { title }: CreateMovieDto,
     ) {
-        const hasCrossedLimit = await this.moviesService.getLimitStatus(
+        const hasExceededLimit = await this.moviesService.getLimitStatus(
             req.user,
         );
 
-        if (hasCrossedLimit) {
+        if (hasExceededLimit) {
             throw new HttpException(
                 {
                     statusCode: HttpStatus.FORBIDDEN,
                     errorMessage:
-                        "You have crossed your monthly limit of API calls",
+                        "You have exceeded your monthly limit of API calls",
                 },
                 HttpStatus.FORBIDDEN,
             );
