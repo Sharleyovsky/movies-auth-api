@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { getConfig } from "./config/config";
+import { MoviesModule } from './movies/movies.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { getConfig } from "./config/config";
             inject: [ConfigService],
         }),
         AuthModule,
+        MoviesModule,
     ],
     controllers: [AppController, MoviesController],
     providers: [AppService, MoviesService],
