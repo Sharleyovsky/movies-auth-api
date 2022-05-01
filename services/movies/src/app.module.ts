@@ -1,12 +1,10 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { getConfig } from "./config/config";
 import { MoviesModule } from "./movies/movies.module";
-import { OmdbModule } from './omdb/omdb.module';
+import { OmdbModule } from "./omdb/omdb.module";
 
 @Module({
     imports: [
@@ -23,7 +21,7 @@ import { OmdbModule } from './omdb/omdb.module';
         MoviesModule,
         OmdbModule,
     ],
-    controllers: [AppController],
-    providers: [AppService],
+    controllers: [],
+    providers: [],
 })
 export class AppModule {}
