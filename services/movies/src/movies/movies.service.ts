@@ -21,12 +21,16 @@ export class MoviesService {
         }
 
         const toDate = new Date();
-        const fromDate = new Date(toDate.getFullYear(), toDate.getMonth() + 1);
+        const fromDate = new Date(
+            toDate.getFullYear(),
+            toDate.getMonth(),
+            toDate.getDate() - 30,
+        );
         const createdMoviesAmount = await this.movieModel.countDocuments({
             userId: id,
             createdAt: {
-                $gte: fromDate.toString(),
-                $lte: toDate.toString(),
+                $gte: fromDate.toISOString(),
+                $lte: toDate.toISOString(),
             },
         });
 
