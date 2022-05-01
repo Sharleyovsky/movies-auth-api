@@ -14,7 +14,7 @@ export class MoviesService {
         private readonly configService: ConfigService,
     ) {}
 
-    async getLimitStatus(id: number, role: string) {
+    async isAboveLimit(id: number, role: string) {
         if (role === "premium") {
             return false;
         }
@@ -49,7 +49,7 @@ export class MoviesService {
         }).save();
     }
 
-    async findAll(id: number) {
+    async findUserMovies(id: number) {
         return this.movieModel.find({ userId: id }).exec();
     }
 }

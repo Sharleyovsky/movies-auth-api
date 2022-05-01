@@ -9,7 +9,6 @@ import {
     HttpStatus,
 } from "@nestjs/common";
 import { JwtGuard } from "../auth/guards/jwt.guard";
-import { User } from "../types/User";
 import { UserRequest } from "../types/UserRequest";
 import { MoviesService } from "./movies.service";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -32,8 +31,7 @@ export class MoviesController {
         type: MovieDto,
     })
     async getMovies(@Request() req: UserRequest) {
-        const { id }: User = req.user;
-        return await this.moviesService.findAll(id);
+        return await this.moviesService.findUserMovies(req.user.id);
     }
 
     @UseGuards(JwtGuard)
@@ -56,7 +54,7 @@ export class MoviesController {
         @Body() { title }: CreateMovieDto,
     ) {
         const { id, role } = req.user;
-        const hasExceededLimit = await this.moviesService.getLimitStatus(
+        const hasExceededLimit = await this.moviesService.isAboveLimit(
             id,
             role,
         );
