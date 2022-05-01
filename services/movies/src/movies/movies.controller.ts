@@ -12,8 +12,10 @@ import { JwtGuard } from "../auth/guards/jwt.guard";
 import { User } from "../types/User";
 import { UserRequest } from "../types/UserRequest";
 import { MoviesService } from "./movies.service";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CreateMovieDto } from "./dto/create-movie.dto";
+import { MovieDto } from "./dto/movie.dto";
+import { ErrorDto } from "./dto/error.dto";
 
 @ApiTags("movies")
 @Controller("movies")
@@ -22,10 +24,12 @@ export class MoviesController {
 
     @UseGuards(JwtGuard)
     @Get()
+    @ApiBearerAuth()
     @ApiResponse({
         status: 200,
         description: "Get all movies created by a authenticated user",
         isArray: true,
+        type: MovieDto,
     })
     async getMovies(@Request() req: UserRequest) {
         const { id }: User = req.user;
@@ -34,6 +38,19 @@ export class MoviesController {
 
     @UseGuards(JwtGuard)
     @Post()
+    @ApiBearerAuth()
+    @ApiResponse({
+        status: 201,
+        description: "Create a movie based on title",
+        isArray: false,
+        type: MovieDto,
+    })
+    @ApiResponse({
+        status: 403,
+        description:
+            "User doesn't have premium role and has exceeded monthly limit",
+        type: ErrorDto,
+    })
     async createMovie(
         @Request() req: UserRequest,
         @Body() { title }: CreateMovieDto,
