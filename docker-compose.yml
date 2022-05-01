@@ -29,7 +29,7 @@ services:
       - '4000:4000'
     environment:
       JWT_SECRET: ${JWT_SECRET}
-      MONGO_URI: mongodb://${DB_USER}:${DB_PASS}@mongo:27017/admin
+      MONGO_URI: mongodb://${DB_USER}:${DB_PASS}@mongo:27017
       OMDB_API_KEY: ${OMDB_API_KEY}
 
 volumes:
