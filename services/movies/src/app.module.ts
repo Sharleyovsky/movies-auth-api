@@ -6,6 +6,7 @@ import { AuthModule } from "./auth/auth.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { getConfig } from "./config/config";
 import { MoviesModule } from "./movies/movies.module";
+import { OmdbModule } from './omdb/omdb.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { MoviesModule } from "./movies/movies.module";
         }),
         AuthModule,
         MoviesModule,
+        OmdbModule,
     ],
     controllers: [AppController],
     providers: [AppService],
