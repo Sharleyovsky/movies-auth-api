@@ -26,7 +26,7 @@ export class MoviesController {
     @Get()
     @ApiBearerAuth()
     @ApiResponse({
-        status: 200,
+        status: HttpStatus.OK,
         description: "Get all movies created by a authenticated user",
         isArray: true,
         type: MovieDto,
@@ -40,13 +40,13 @@ export class MoviesController {
     @Post()
     @ApiBearerAuth()
     @ApiResponse({
-        status: 201,
+        status: HttpStatus.CREATED,
         description: "Create a movie based on title",
         isArray: false,
         type: MovieDto,
     })
     @ApiResponse({
-        status: 403,
+        status: HttpStatus.TOO_MANY_REQUESTS,
         description:
             "User doesn't have premium role and has exceeded monthly limit",
         type: ErrorDto,
