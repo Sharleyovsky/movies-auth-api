@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
-@Schema()
+@Schema({ versionKey: false, timestamps: true })
 export class Movie {
     @Prop({ required: true })
     userId: number;
