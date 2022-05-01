@@ -1,13 +1,11 @@
 import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { MoviesController } from "./movies/movies.controller";
-import { MoviesService } from "./movies/movies.service";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { getConfig } from "./config/config";
-import { MoviesModule } from './movies/movies.module';
+import { MoviesModule } from "./movies/movies.module";
 
 @Module({
     imports: [
@@ -23,7 +21,7 @@ import { MoviesModule } from './movies/movies.module';
         AuthModule,
         MoviesModule,
     ],
-    controllers: [AppController, MoviesController],
-    providers: [AppService, MoviesService],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}
