@@ -55,8 +55,10 @@ export class MoviesController {
         @Request() req: UserRequest,
         @Body() { title }: CreateMovieDto,
     ) {
+        const { id, role } = req.user;
         const hasExceededLimit = await this.moviesService.getLimitStatus(
-            req.user,
+            id,
+            role,
         );
 
         if (hasExceededLimit) {

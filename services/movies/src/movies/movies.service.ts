@@ -3,7 +3,6 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Movie, MovieDocument } from "./movie.schema";
 import { OmdbService } from "../omdb/omdb.service";
-import { User } from "../types/User";
 import { ConfigService } from "@nestjs/config";
 
 @Injectable()
@@ -15,7 +14,7 @@ export class MoviesService {
         private readonly configService: ConfigService,
     ) {}
 
-    async getLimitStatus({ id, role }: User) {
+    async getLimitStatus(id: number, role: string) {
         if (role === "premium") {
             return false;
         }
