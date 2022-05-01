@@ -5,6 +5,8 @@ import {
     Request,
     Post,
     Body,
+    HttpException,
+    HttpStatus,
 } from "@nestjs/common";
 import { JwtGuard } from "../auth/guards/jwt.guard";
 import { User } from "../types/User";
@@ -36,6 +38,21 @@ export class MoviesController {
         @Request() req: UserRequest,
         @Body() { title }: MovieDto,
     ) {
+        const hasCrossedLimit = await this.moviesService.getLimitStatus(
+            req.user,
+        );
+
+        if (hasCrossedLimit) {
+            throw new HttpException(
+                {
+                    statusCode: HttpStatus.FORBIDDEN,
+                    errorMessage:
+                        "You have crossed your monthly limit of API calls",
+                },
+                HttpStatus.FORBIDDEN,
+            );
+        }
+
         return await this.moviesService.create({ title, id: req.user.id });
     }
 }
