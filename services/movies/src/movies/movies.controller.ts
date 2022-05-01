@@ -13,7 +13,7 @@ import { User } from "../types/User";
 import { UserRequest } from "../types/UserRequest";
 import { MoviesService } from "./movies.service";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
-import { MovieDto } from "./dto/movie.dto";
+import { CreateMovieDto } from "./dto/create-movie.dto";
 
 @ApiTags("movies")
 @Controller("movies")
@@ -36,7 +36,7 @@ export class MoviesController {
     @Post()
     async createMovie(
         @Request() req: UserRequest,
-        @Body() { title }: MovieDto,
+        @Body() { title }: CreateMovieDto,
     ) {
         const hasCrossedLimit = await this.moviesService.getLimitStatus(
             req.user,
