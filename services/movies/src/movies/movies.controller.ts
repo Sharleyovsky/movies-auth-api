@@ -30,6 +30,11 @@ export class MoviesController {
         isArray: true,
         type: MovieDto,
     })
+    @ApiResponse({
+        status: HttpStatus.UNAUTHORIZED,
+        description: "Calling API without authorization header",
+        type: ErrorDto,
+    })
     async getMovies(@Request() req: UserRequest) {
         return await this.moviesService.findUserMovies(req.user.id);
     }
@@ -49,6 +54,11 @@ export class MoviesController {
             "User doesn't have premium role and has exceeded monthly limit",
         type: ErrorDto,
     })
+    @ApiResponse({
+        status: HttpStatus.UNAUTHORIZED,
+        description: "Calling API without authorization header",
+        type: ErrorDto,
+    })
     async createMovie(
         @Request() req: UserRequest,
         @Body() { title }: CreateMovieDto,
@@ -63,7 +73,7 @@ export class MoviesController {
             throw new HttpException(
                 {
                     statusCode: HttpStatus.TOO_MANY_REQUESTS,
-                    errorMessage:
+                    message:
                         "You have exceeded your monthly limit of API calls",
                 },
                 HttpStatus.TOO_MANY_REQUESTS,
