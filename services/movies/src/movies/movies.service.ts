@@ -15,7 +15,7 @@ export class MoviesService {
         private readonly configService: ConfigService,
     ) {}
 
-    async hasCrossedLimit({ id, role }: User) {
+    async getLimitStatus({ id, role }: User) {
         if (role === "premium") {
             return false;
         }
