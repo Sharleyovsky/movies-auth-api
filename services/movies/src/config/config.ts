@@ -5,4 +5,5 @@ export const getConfig = () => ({
     jwt: process.env.JWT_SECRET,
     connectionUri: process.env.MONGO_URI,
     omdbUrl: `http://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}`,
+    apiCallsLimit: 5,
 });
