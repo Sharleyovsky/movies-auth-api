@@ -64,11 +64,11 @@ export class MoviesController {
         if (hasExceededLimit) {
             throw new HttpException(
                 {
-                    statusCode: HttpStatus.FORBIDDEN,
+                    statusCode: HttpStatus.TOO_MANY_REQUESTS,
                     errorMessage:
                         "You have exceeded your monthly limit of API calls",
                 },
-                HttpStatus.FORBIDDEN,
+                HttpStatus.TOO_MANY_REQUESTS,
             );
         }
 
