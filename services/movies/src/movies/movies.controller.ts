@@ -9,7 +9,7 @@ import {
     HttpStatus,
 } from "@nestjs/common";
 import { JwtGuard } from "../auth/guards/jwt.guard";
-import { UserRequest } from "../types/UserRequest";
+import { UserRequest } from "../types/user";
 import { MoviesService } from "./movies.service";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CreateMovieDto } from "./dto/create-movie.dto";
