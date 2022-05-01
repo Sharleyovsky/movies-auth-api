@@ -5,5 +5,5 @@ export class ErrorDto {
     statusCode: number;
 
     @ApiProperty()
-    errorMessage: string;
+    message: string;
 }
