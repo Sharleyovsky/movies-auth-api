@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run a one-line script
+        run: DB_PORT=27017 DB_USER=admin DB_PASS=secretpass JWT_SECRET=secret OMDB_API_KEY=${{secrets.OMDB_API_KEY}} docker-compose -f docker-compose.ci.yml up
