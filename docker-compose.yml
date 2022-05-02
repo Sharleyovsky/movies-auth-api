@@ -8,8 +8,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
-    volumes:
-      - mongo_container_data:/data/db
   auth:
     build:
       context: services/auth
@@ -17,8 +15,6 @@ services:
     ports:
       - published: ${APP_PORT:-3000}
         target: 3000
-    volumes:
-      - .:/app/
     environment:
       JWT_SECRET: ${JWT_SECRET}
   movies:
@@ -26,11 +22,11 @@ services:
       context: services/movies
       dockerfile: Dockerfile
     ports:
-      - '4000:4000'
+      - published: ${MOVIES_PORT:-4000}
+        target: 3000
     environment:
       JWT_SECRET: ${JWT_SECRET}
       MONGO_URI: mongodb://${DB_USER}:${DB_PASS}@mongo:27017
       OMDB_API_KEY: ${OMDB_API_KEY}
-
-volumes:
-  mongo_container_data:
+    depends_on:
+      - mongo
