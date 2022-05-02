@@ -9,11 +9,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
   movies:
-    command:
-      - npm run test:e2e
     build:
       context: services/movies
-      dockerfile: Dockerfile
+      dockerfile: ci.Dockerfile
     ports:
       - published: ${MOVIES_PORT:-4000}
         target: 3000
