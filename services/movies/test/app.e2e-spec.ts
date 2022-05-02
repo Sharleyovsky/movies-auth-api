@@ -55,4 +55,6 @@ describe("AppController (e2e)", () => {
             "updatedAt",
         ]);
     });
+
+    afterEach(async () => app.close());
 });
