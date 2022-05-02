@@ -1,0 +1,25 @@
+version: "3.2"
+services:
+  mongo:
+    container_name: mongo_container
+    image: mongo:5.0
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+  movies:
+    command:
+      - npm run test:e2e
+    build:
+      context: services/movies
+      dockerfile: Dockerfile
+    ports:
+      - published: ${MOVIES_PORT:-4000}
+        target: 3000
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      MONGO_URI: mongodb://${DB_USER}:${DB_PASS}@mongo:27017
+      OMDB_API_KEY: ${OMDB_API_KEY}
+    depends_on:
+      - mongo
