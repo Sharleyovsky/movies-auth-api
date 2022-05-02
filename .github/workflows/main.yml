@@ -15,5 +15,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Run a one-line script
-        run: DB_PORT=27017 DB_USER=admin DB_PASS=secretpass JWT_SECRET=secret OMDB_API_KEY=${{secrets.OMDB_API_KEY}} docker-compose -f docker-compose.ci.yml up
+      - name: Run tests
+        run: DB_PORT=27017 DB_USER=admin DB_PASS=secretpass JWT_SECRET=secret OMDB_API_KEY=${{secrets.OMDB_API_KEY}} docker-compose -f docker-compose.ci.yml up -d --build
