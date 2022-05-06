@@ -49,7 +49,7 @@ export class MoviesService {
             );
         }
 
-        let { Title, Released, Genre, Director } =
+        const { Title, Released, Genre, Director } =
             await this.omdbService.getMovie(title);
 
         return new this.movieModel({
