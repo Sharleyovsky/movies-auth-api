@@ -149,6 +149,6 @@ export class MoviesController {
             );
         }
 
-        return await this.moviesService.create({ title, id: req.user.id });
+        return await this.moviesService.create({ title, userId: req.user.id });
     }
 }
