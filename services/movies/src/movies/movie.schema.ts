@@ -5,16 +5,16 @@ export class Movie {
     @Prop({ required: true })
     userId: number;
 
-    @Prop({ required: true })
+    @Prop({ required: true, minlength: 1 })
     title: string;
 
     @Prop({ required: true })
     released: Date;
 
-    @Prop({ required: true })
+    @Prop({ required: true, minlength: 1 })
     genre: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, minlength: 1 })
     director: string;
 }
 
