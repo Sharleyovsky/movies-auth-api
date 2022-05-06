@@ -1,12 +1,12 @@
 import {
+    Body,
     Controller,
     Get,
-    UseGuards,
-    Request,
-    Post,
-    Body,
     HttpException,
     HttpStatus,
+    Post,
+    Request,
+    UseGuards,
 } from "@nestjs/common";
 import { JwtGuard } from "../auth/guards/jwt.guard";
 import { UserRequest } from "../types/user";
@@ -15,13 +15,17 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CreateMovieDto } from "./dto/create-movie.dto";
 import { MovieDto } from "./dto/movie.dto";
 import { ErrorDto } from "./dto/error.dto";
+import { UserRoles } from "../auth/user-roles.decorator";
+import { UserRoleEnum } from "../auth/user-role.enum";
+import { UserRolesGuard } from "../auth/guards/user-roles.guard";
 
 @ApiTags("movies")
 @Controller("movies")
 export class MoviesController {
     constructor(private readonly moviesService: MoviesService) {}
 
-    @UseGuards(JwtGuard)
+    @UserRoles(UserRoleEnum.Basic, UserRoleEnum.Premium)
+    @UseGuards(JwtGuard, UserRolesGuard)
     @Get()
     @ApiBearerAuth()
     @ApiResponse({
@@ -39,7 +43,8 @@ export class MoviesController {
         return await this.moviesService.findUserMovies(req.user.id);
     }
 
-    @UseGuards(JwtGuard)
+    @UserRoles(UserRoleEnum.Basic, UserRoleEnum.Premium)
+    @UseGuards(JwtGuard, UserRolesGuard)
     @Post()
     @ApiBearerAuth()
     @ApiResponse({
