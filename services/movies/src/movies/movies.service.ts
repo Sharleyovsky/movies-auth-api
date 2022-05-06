@@ -54,10 +54,10 @@ export class MoviesService {
 
         return new this.movieModel({
             userId,
-            title: Title,
+            title: Title.trim(),
             released: Released,
-            genre: Genre,
-            director: Director,
+            genre: Genre.trim(),
+            director: Director.trim(),
         }).save();
     }
 
