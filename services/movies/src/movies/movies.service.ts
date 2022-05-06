@@ -52,4 +52,12 @@ export class MoviesService {
     async findUserMovies(id: number) {
         return this.movieModel.find({ userId: id }).exec();
     }
+
+    async findUserMovie(query: {
+        userId: number;
+        title?: string;
+        _id?: string;
+    }) {
+        return this.movieModel.findOne(query);
+    }
 }
