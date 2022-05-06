@@ -36,12 +36,12 @@ export class MoviesService {
         return createdMoviesAmount >= this.configService.get("apiCallsLimit");
     }
 
-    async create({ title, id }: { title: string; id: number }) {
+    async create({ title, userId }: { title: string; userId: number }) {
         const { Title, Released, Genre, Director } =
             await this.omdbService.getMovie(title);
 
         return new this.movieModel({
-            userId: id,
+            userId,
             title: Title,
             released: Released,
             genre: Genre,
@@ -49,8 +49,8 @@ export class MoviesService {
         }).save();
     }
 
-    async findUserMovies(id: number) {
-        return this.movieModel.find({ userId: id }).exec();
+    async findUserMovies(userId: number) {
+        return this.movieModel.find({ userId }).exec();
     }
 
     async findUserMovie(query: {
