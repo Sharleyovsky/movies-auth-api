@@ -128,6 +128,22 @@ export class MoviesController {
         description: "Calling API without authorization header",
         type: ErrorDto,
     })
+    @ApiResponse({
+        status: HttpStatus.BAD_REQUEST,
+        description:
+            "This could mean that title passed in body is either incorrect or empty or duplicated movie by this user",
+        type: ErrorDto,
+    })
+    @ApiResponse({
+        status: HttpStatus.NOT_FOUND,
+        description: "Movie was not found in the OMDB",
+        type: ErrorDto,
+    })
+    @ApiResponse({
+        status: HttpStatus.BAD_GATEWAY,
+        description: "You have used wrong API key for OMDB API",
+        type: ErrorDto,
+    })
     async createMovie(
         @Request() req: UserRequest,
         @Body() { title }: CreateMovieDto,
