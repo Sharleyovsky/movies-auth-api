@@ -5,6 +5,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { getConfig } from "./config/config";
 import { MoviesModule } from "./movies/movies.module";
 import { OmdbModule } from "./omdb/omdb.module";
+import { HealthModule } from './health/health.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { OmdbModule } from "./omdb/omdb.module";
         AuthModule,
         MoviesModule,
         OmdbModule,
+        HealthModule,
     ],
     controllers: [],
     providers: [],
