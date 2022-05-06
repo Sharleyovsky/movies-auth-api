@@ -23,7 +23,7 @@ export class OmdbService {
             }
 
             if (data?.Error === "Incorrect IMDb ID.") {
-                //I'm handling it in the try part because this error for some reason returns 200 status code
+                //I'm handling it in the try part because this error for some reason is returned with 200 status code by OMDB api
                 throw new HttpException(
                     {
                         statusCode: HttpStatus.BAD_REQUEST,
