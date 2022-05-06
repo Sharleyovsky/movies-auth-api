@@ -1,7 +1,26 @@
+import { Logger } from "@nestjs/common";
+
 export const getConfig = () => {
-    const requiredEnvs = ["JWT_SECRET", "MONGO_URI", "OMDB_API_KEY"];
+    const logger = new Logger("Config");
+    const requiredEnvs = [
+        "MOVIES_PORT",
+        "JWT_SECRET",
+        "MONGO_URI",
+        "OMDB_API_KEY",
+    ];
+
     requiredEnvs.every((env) => {
-        if (!Object.keys(process.env).includes(env)) {
+        const envs = Object.keys(process.env);
+
+        if (!envs.includes(env) && env === "MOVIES_PORT") {
+            logger.warn(
+                "Environment variable MOVIES_PORT is not defined, the app is going to run on default 3000 port",
+            );
+
+            return true;
+        }
+
+        if (!envs.includes(env)) {
             throw new Error(`Environment variable ${env} is not defined!`);
         }
 
