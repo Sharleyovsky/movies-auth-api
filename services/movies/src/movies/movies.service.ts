@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Movie, MovieDocument } from "./movie.schema";
 import { OmdbService } from "../omdb/omdb.service";
@@ -37,7 +37,19 @@ export class MoviesService {
     }
 
     async create({ title, userId }: { title: string; userId: number }) {
-        const { Title, Released, Genre, Director } =
+        const movie = await this.findUserMovie({ userId, title });
+
+        if (movie) {
+            throw new HttpException(
+                {
+                    statusCode: HttpStatus.BAD_REQUEST,
+                    message: "This movie was already added by this user!",
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+
+        let { Title, Released, Genre, Director } =
             await this.omdbService.getMovie(title);
 
         return new this.movieModel({
