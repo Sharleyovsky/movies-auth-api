@@ -4,6 +4,7 @@ import * as request from "supertest";
 import { AppModule } from "../src/app.module";
 import { User } from "../src/types/user";
 import { JwtService } from "@nestjs/jwt";
+import { MovieDto } from "../src/movies/dto/movie.dto";
 
 describe("AppController (e2e)", () => {
     let app: INestApplication;
@@ -11,6 +12,7 @@ describe("AppController (e2e)", () => {
         secret: process.env.JWT_SECRET,
     });
     const movies = ["Joker", "Deadpool", "Thor", "Venom", "Hulk", "Daredevil"];
+    let createdMovie: MovieDto;
     const [user, premiumUser]: User[] = [
         {
             id: 1,
@@ -110,6 +112,39 @@ describe("AppController (e2e)", () => {
             "createdAt",
             "updatedAt",
         ]);
+
+        createdMovie = response.body;
+    });
+
+    it("/movies:id (GET)", async () => {
+        const response = await request(app.getHttpServer())
+            .get(`/movies/${createdMovie._id}`)
+            .set("Authorization", `Bearer ${jwtPremiumMock}`);
+
+        expect(response.status).toBe(HttpStatus.OK);
+        expect(response.body).toEqual(createdMovie);
+    });
+
+    it("/movies:id (GET) movie not found error", async () => {
+        const id = "627682aaaaaaaaaaaaaaaaaa";
+        const response = await request(app.getHttpServer())
+            .get(`/movies/${id}`)
+            .set("Authorization", `Bearer ${jwtPremiumMock}`);
+
+        expect(response.status).toBe(HttpStatus.NOT_FOUND);
+        expect(response.body?.message).toBe(
+            `Couldn't find a movie with id: ${id}`,
+        );
+    });
+
+    it("/movies:id (GET) wrong id error", async () => {
+        const id = "123";
+        const response = await request(app.getHttpServer())
+            .get(`/movies/${id}`)
+            .set("Authorization", `Bearer ${jwtPremiumMock}`);
+
+        expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+        expect(response.body?.message).toBe("Movie ID is incorrect!");
     });
 
     it("/movies (POST) duplicate error", async () => {
