@@ -35,6 +35,12 @@ describe("AppController (e2e)", () => {
         await app.init();
     });
 
+    it("/health (GET)", async () => {
+        const response = await request(app.getHttpServer()).get("/health");
+
+        expect(response.status).toBe(HttpStatus.OK);
+    });
+
     it("/movies (GET) Unauthorized", async () => {
         const response = await request(app.getHttpServer()).get("/movies");
 
