@@ -131,7 +131,7 @@ export class MoviesController {
     @ApiResponse({
         status: HttpStatus.BAD_REQUEST,
         description:
-            "This could mean that title passed in body is either incorrect or empty or duplicated movie by this user",
+            "This could mean that title passed in body is either incorrect or empty or movie that you are looking for was already added by this user",
         type: ErrorDto,
     })
     @ApiResponse({
