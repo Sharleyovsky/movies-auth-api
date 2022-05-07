@@ -1,5 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { INestApplication } from "@nestjs/common";
+import { HttpStatus, INestApplication } from "@nestjs/common";
 import * as request from "supertest";
 import { AppModule } from "../src/app.module";
 import { User } from "../src/types/user";
@@ -38,7 +38,7 @@ describe("AppController (e2e)", () => {
     it("/movies (GET) Unauthorized", async () => {
         const response = await request(app.getHttpServer()).get("/movies");
 
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
     it("/movies (GET)", async () => {
@@ -46,7 +46,7 @@ describe("AppController (e2e)", () => {
             .get("/movies")
             .set("Authorization", `Bearer ${jwtMock}`);
 
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(HttpStatus.OK);
         expect(Array.isArray(response.body)).toBe(true);
     });
 
@@ -56,7 +56,7 @@ describe("AppController (e2e)", () => {
             .send({ title: "Batman" })
             .set("Authorization", `Bearer ${jwtMock}`);
 
-        expect(response.status).toBe(201);
+        expect(response.status).toBe(HttpStatus.CREATED);
         expect(Object.keys(response.body)).toEqual([
             "userId",
             "title",
@@ -75,7 +75,7 @@ describe("AppController (e2e)", () => {
             .send({ title: "Batman" })
             .set("Authorization", `Bearer ${jwtMock}`);
 
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(HttpStatus.BAD_REQUEST);
         expect(response.body?.message).toBe(
             "This movie was already added by this user!",
         );
