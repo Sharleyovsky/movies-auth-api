@@ -69,5 +69,17 @@ describe("AppController (e2e)", () => {
         ]);
     });
 
+    it("/movies (POST) duplicate error", async () => {
+        const response = await request(app.getHttpServer())
+            .post("/movies")
+            .send({ title: "Batman" })
+            .set("Authorization", `Bearer ${jwtMock}`);
+
+        expect(response.status).toBe(400);
+        expect(response.body?.message).toBe(
+            "This movie was already added by this user!",
+        );
+    });
+
     afterEach(async () => app.close());
 });
