@@ -6,6 +6,7 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import axios from "axios";
+import { MoviesError } from "../movies/movies-error.enum";
 
 @Injectable()
 export class OmdbService {
@@ -27,7 +28,7 @@ export class OmdbService {
                 throw new HttpException(
                     {
                         statusCode: HttpStatus.BAD_REQUEST,
-                        message: "Title is either empty or incorrect!",
+                        message: MoviesError.API_TITLE,
                     },
                     HttpStatus.BAD_REQUEST,
                 );
@@ -37,8 +38,7 @@ export class OmdbService {
                 throw new HttpException(
                     {
                         statusCode: HttpStatus.NOT_FOUND,
-                        message:
-                            "Movie that you are looking for wasn't found in the OMDB",
+                        message: MoviesError.API_NOT_FOUND,
                     },
                     HttpStatus.NOT_FOUND,
                 );
@@ -48,7 +48,7 @@ export class OmdbService {
                 throw new HttpException(
                     {
                         statusCode: HttpStatus.BAD_GATEWAY,
-                        message: "Server is using invalid API key!",
+                        message: MoviesError.INVALID_API_KEY,
                     },
                     HttpStatus.BAD_GATEWAY,
                 );

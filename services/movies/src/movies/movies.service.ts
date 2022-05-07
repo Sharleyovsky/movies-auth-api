@@ -4,6 +4,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Movie, MovieDocument } from "./movie.schema";
 import { OmdbService } from "../omdb/omdb.service";
 import { ConfigService } from "@nestjs/config";
+import { MoviesError } from "./movies-error.enum";
 
 @Injectable()
 export class MoviesService {
@@ -43,7 +44,7 @@ export class MoviesService {
             throw new HttpException(
                 {
                     statusCode: HttpStatus.BAD_REQUEST,
-                    message: "This movie was already added by this user!",
+                    message: MoviesError.USER_DUPLICATE,
                 },
                 HttpStatus.BAD_REQUEST,
             );

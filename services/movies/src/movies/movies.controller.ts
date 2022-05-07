@@ -20,6 +20,7 @@ import { ErrorDto } from "./dto/error.dto";
 import { UserRoles } from "../auth/user-roles.decorator";
 import { UserRoleEnum } from "../auth/user-role.enum";
 import { UserRolesGuard } from "../auth/guards/user-roles.guard";
+import { MoviesError } from "./movies-error.enum";
 
 @ApiTags("movies")
 @Controller("movies")
@@ -91,7 +92,7 @@ export class MoviesController {
                 throw new HttpException(
                     {
                         statusCode: HttpStatus.NOT_FOUND,
-                        message: `Couldn't find a movie with id: ${_id}`,
+                        message: MoviesError.NOT_FOUND,
                     },
                     HttpStatus.NOT_FOUND,
                 );
@@ -103,7 +104,7 @@ export class MoviesController {
                 throw new HttpException(
                     {
                         statusCode: HttpStatus.BAD_REQUEST,
-                        message: "Movie ID is incorrect!",
+                        message: MoviesError.INVALID_ID,
                     },
                     HttpStatus.BAD_REQUEST,
                 );
@@ -173,8 +174,7 @@ export class MoviesController {
             throw new HttpException(
                 {
                     statusCode: HttpStatus.TOO_MANY_REQUESTS,
-                    message:
-                        "You have exceeded your monthly limit of API calls",
+                    message: MoviesError.EXCEEDED_LIMIT,
                 },
                 HttpStatus.TOO_MANY_REQUESTS,
             );

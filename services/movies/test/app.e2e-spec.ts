@@ -5,6 +5,7 @@ import { AppModule } from "../src/app.module";
 import { User } from "../src/types/user";
 import { JwtService } from "@nestjs/jwt";
 import { MovieDto } from "../src/movies/dto/movie.dto";
+import { MoviesError } from "../src/movies/movies-error.enum";
 
 describe("AppController (e2e)", () => {
     let app: INestApplication;
@@ -132,19 +133,17 @@ describe("AppController (e2e)", () => {
             .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.NOT_FOUND);
-        expect(response.body?.message).toBe(
-            `Couldn't find a movie with id: ${id}`,
-        );
+        expect(response.body?.message).toBe(MoviesError.NOT_FOUND);
     });
 
-    it("/movies:id (GET) wrong id error", async () => {
+    it("/movies:id (GET) invalid id error", async () => {
         const id = "123";
         const response = await request(app.getHttpServer())
             .get(`/movies/${id}`)
             .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-        expect(response.body?.message).toBe("Movie ID is incorrect!");
+        expect(response.body?.message).toBe(MoviesError.INVALID_ID);
     });
 
     it("/movies (POST) duplicate error", async () => {
@@ -154,9 +153,7 @@ describe("AppController (e2e)", () => {
             .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-        expect(response.body?.message).toBe(
-            "This movie was already added by this user!",
-        );
+        expect(response.body?.message).toBe(MoviesError.USER_DUPLICATE);
     });
 
     it("/movies (POST) not found in the OMDB", async () => {
@@ -166,9 +163,7 @@ describe("AppController (e2e)", () => {
             .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.NOT_FOUND);
-        expect(response.body?.message).toBe(
-            "Movie that you are looking for wasn't found in the OMDB",
-        );
+        expect(response.body?.message).toBe(MoviesError.API_NOT_FOUND);
     });
 
     it("/movies (POST) empty title", async () => {
@@ -178,9 +173,7 @@ describe("AppController (e2e)", () => {
             .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-        expect(response.body?.message).toBe(
-            "Title is either empty or incorrect!",
-        );
+        expect(response.body?.message).toBe(MoviesError.API_TITLE);
     });
 
     it("/movies (POST) limit test for basic user", async () => {
@@ -194,7 +187,7 @@ describe("AppController (e2e)", () => {
             if (index === movies.length - 1) {
                 expect(response.status).toBe(HttpStatus.TOO_MANY_REQUESTS);
                 return expect(response.body?.message).toBe(
-                    "You have exceeded your monthly limit of API calls",
+                    MoviesError.EXCEEDED_LIMIT,
                 );
             }
 
