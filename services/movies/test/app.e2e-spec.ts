@@ -81,5 +81,29 @@ describe("AppController (e2e)", () => {
         );
     });
 
+    it("/movies (POST) not found in the OMDB", async () => {
+        const response = await request(app.getHttpServer())
+            .post("/movies")
+            .send({ title: "HHAJDHFASH" })
+            .set("Authorization", `Bearer ${jwtMock}`);
+
+        expect(response.status).toBe(HttpStatus.NOT_FOUND);
+        expect(response.body?.message).toBe(
+            "Movie that you are looking for wasn't found in the OMDB",
+        );
+    });
+
+    it("/movies (POST) empty title", async () => {
+        const response = await request(app.getHttpServer())
+            .post("/movies")
+            .send({ title: " " })
+            .set("Authorization", `Bearer ${jwtMock}`);
+
+        expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+        expect(response.body?.message).toBe(
+            "Title is either empty or incorrect!",
+        );
+    });
+
     afterEach(async () => app.close());
 });
