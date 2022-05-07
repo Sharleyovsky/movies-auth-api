@@ -25,6 +25,16 @@ describe("AppController (e2e)", () => {
             expiresIn: 60,
         },
     );
+    const jwtMockWrongRole = jwtService.sign(
+        {
+            userId: user.id,
+            name: user.name,
+            role: "limited",
+        },
+        {
+            expiresIn: 60,
+        },
+    );
 
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -54,6 +64,14 @@ describe("AppController (e2e)", () => {
 
         expect(response.status).toBe(HttpStatus.OK);
         expect(Array.isArray(response.body)).toBe(true);
+    });
+
+    it("/movies (GET) role error", async () => {
+        const response = await request(app.getHttpServer())
+            .get("/movies")
+            .set("Authorization", `Bearer ${jwtMockWrongRole}`);
+
+        expect(response.status).toBe(HttpStatus.FORBIDDEN);
     });
 
     it("/movies (POST)", async () => {
