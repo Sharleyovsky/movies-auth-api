@@ -10,12 +10,30 @@ describe("AppController (e2e)", () => {
     let jwtService: JwtService = new JwtService({
         secret: process.env.JWT_SECRET,
     });
-    const user: User = {
-        id: 1,
-        role: "basic",
-        name: "Jim",
-    };
-    const jwtMock = jwtService.sign(
+    const [user, premiumUser]: User[] = [
+        {
+            id: 1,
+            role: "basic",
+            name: "Jim",
+        },
+        {
+            id: 2,
+            role: "premium",
+            name: "John",
+        },
+    ];
+
+    const jwtPremiumMock = jwtService.sign(
+        {
+            userId: premiumUser.id,
+            name: premiumUser.name,
+            role: premiumUser.role,
+        },
+        {
+            expiresIn: 60,
+        },
+    );
+    const jwtBasicMock = jwtService.sign(
         {
             userId: user.id,
             name: user.name,
@@ -27,8 +45,8 @@ describe("AppController (e2e)", () => {
     );
     const jwtMockWrongRole = jwtService.sign(
         {
-            userId: user.id,
-            name: user.name,
+            userId: premiumUser.id,
+            name: premiumUser.name,
             role: "limited",
         },
         {
@@ -60,7 +78,7 @@ describe("AppController (e2e)", () => {
     it("/movies (GET)", async () => {
         const response = await request(app.getHttpServer())
             .get("/movies")
-            .set("Authorization", `Bearer ${jwtMock}`);
+            .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.OK);
         expect(Array.isArray(response.body)).toBe(true);
@@ -78,7 +96,7 @@ describe("AppController (e2e)", () => {
         const response = await request(app.getHttpServer())
             .post("/movies")
             .send({ title: "Batman" })
-            .set("Authorization", `Bearer ${jwtMock}`);
+            .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.CREATED);
         expect(Object.keys(response.body)).toEqual([
@@ -97,7 +115,7 @@ describe("AppController (e2e)", () => {
         const response = await request(app.getHttpServer())
             .post("/movies")
             .send({ title: "Batman" })
-            .set("Authorization", `Bearer ${jwtMock}`);
+            .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.BAD_REQUEST);
         expect(response.body?.message).toBe(
@@ -109,7 +127,7 @@ describe("AppController (e2e)", () => {
         const response = await request(app.getHttpServer())
             .post("/movies")
             .send({ title: "HHAJDHFASH" })
-            .set("Authorization", `Bearer ${jwtMock}`);
+            .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.NOT_FOUND);
         expect(response.body?.message).toBe(
@@ -121,7 +139,7 @@ describe("AppController (e2e)", () => {
         const response = await request(app.getHttpServer())
             .post("/movies")
             .send({ title: " " })
-            .set("Authorization", `Bearer ${jwtMock}`);
+            .set("Authorization", `Bearer ${jwtPremiumMock}`);
 
         expect(response.status).toBe(HttpStatus.BAD_REQUEST);
         expect(response.body?.message).toBe(
