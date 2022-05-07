@@ -10,6 +10,7 @@ describe("AppController (e2e)", () => {
     let jwtService: JwtService = new JwtService({
         secret: process.env.JWT_SECRET,
     });
+    const movies = ["Joker", "Deadpool", "Thor", "Venom", "Hulk", "Daredevil"];
     const [user, premiumUser]: User[] = [
         {
             id: 1,
@@ -145,6 +146,34 @@ describe("AppController (e2e)", () => {
         expect(response.body?.message).toBe(
             "Title is either empty or incorrect!",
         );
+    });
+
+    it("/movies (POST) limit test for basic user", async () => {
+        for (const movie of movies) {
+            const response = await request(app.getHttpServer())
+                .post("/movies")
+                .send({ title: movie })
+                .set("Authorization", `Bearer ${jwtBasicMock}`);
+            const index = movies.indexOf(movie);
+
+            if (index === movies.length - 1) {
+                expect(response.status).toBe(HttpStatus.TOO_MANY_REQUESTS);
+                return expect(response.body?.message).toBe(
+                    "You have exceeded your monthly limit of API calls",
+                );
+            }
+
+            expect(Object.keys(response.body)).toEqual([
+                "userId",
+                "title",
+                "released",
+                "genre",
+                "director",
+                "_id",
+                "createdAt",
+                "updatedAt",
+            ]);
+        }
     });
 
     afterEach(async () => app.close());
