@@ -41,6 +41,11 @@ export class MoviesController {
         description: "Calling API without authorization header",
         type: ErrorDto,
     })
+    @ApiResponse({
+        status: HttpStatus.FORBIDDEN,
+        description: "User's role is not allowed to access this endpoint",
+        type: ErrorDto,
+    })
     async getMovies(@Request() req: UserRequest) {
         return await this.moviesService.findUserMovies(req.user.id);
     }
@@ -68,6 +73,11 @@ export class MoviesController {
     @ApiResponse({
         status: HttpStatus.BAD_REQUEST,
         description: "Movie ID was not type of ObjectId used in MongoDB",
+        type: ErrorDto,
+    })
+    @ApiResponse({
+        status: HttpStatus.FORBIDDEN,
+        description: "User's role is not allowed to access this endpoint",
         type: ErrorDto,
     })
     async getMovie(@Request() req: UserRequest, @Param("id") _id: string) {
@@ -142,6 +152,11 @@ export class MoviesController {
     @ApiResponse({
         status: HttpStatus.BAD_GATEWAY,
         description: "You have used wrong API key for OMDB API",
+        type: ErrorDto,
+    })
+    @ApiResponse({
+        status: HttpStatus.FORBIDDEN,
+        description: "User's role is not allowed to access this endpoint",
         type: ErrorDto,
     })
     async createMovie(
