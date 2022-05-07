@@ -163,6 +163,28 @@ describe("AppController (e2e)", () => {
                 );
             }
 
+            expect(response.status).toBe(HttpStatus.CREATED);
+            expect(Object.keys(response.body)).toEqual([
+                "userId",
+                "title",
+                "released",
+                "genre",
+                "director",
+                "_id",
+                "createdAt",
+                "updatedAt",
+            ]);
+        }
+    });
+
+    it("/movies (POST) limit test for premium user", async () => {
+        for (const movie of movies) {
+            const response = await request(app.getHttpServer())
+                .post("/movies")
+                .send({ title: movie })
+                .set("Authorization", `Bearer ${jwtPremiumMock}`);
+
+            expect(response.status).toBe(HttpStatus.CREATED);
             expect(Object.keys(response.body)).toEqual([
                 "userId",
                 "title",
