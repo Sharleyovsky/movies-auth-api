@@ -7,6 +7,7 @@ import {
 import { ConfigService } from "@nestjs/config";
 import axios from "axios";
 import { MoviesError } from "../movies/movies-error.enum";
+import { OmdbMovie } from "../types/omdb-movie";
 
 @Injectable()
 export class OmdbService {
@@ -17,7 +18,11 @@ export class OmdbService {
 
     async getMovie(title: string) {
         try {
-            const { data } = await axios.get(`${this.url}&t=${title}`);
+            const {
+                data,
+            }: {
+                data: OmdbMovie;
+            } = await axios.get(`${this.url}&t=${title}`);
 
             if (data?.Response !== "False") {
                 if (data?.Released === "N/A") {
