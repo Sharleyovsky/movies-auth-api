@@ -1,9 +1,10 @@
 import { Model } from "mongoose";
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Movie, MovieDocument } from "./movie.schema";
 import { OmdbService } from "../omdb/omdb.service";
 import { ConfigService } from "@nestjs/config";
+import { MoviesError } from "./movies-error.enum";
 
 @Injectable()
 export class MoviesService {
@@ -36,20 +37,40 @@ export class MoviesService {
         return createdMoviesAmount >= this.configService.get("apiCallsLimit");
     }
 
-    async create({ title, id }: { title: string; id: number }) {
+    async create({ title, userId }: { title: string; userId: number }) {
+        const movie = await this.findUserMovie({ userId, title });
+
+        if (movie) {
+            throw new HttpException(
+                {
+                    statusCode: HttpStatus.BAD_REQUEST,
+                    message: MoviesError.USER_DUPLICATE,
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+
         const { Title, Released, Genre, Director } =
             await this.omdbService.getMovie(title);
 
         return new this.movieModel({
-            userId: id,
-            title: Title,
+            userId,
+            title: Title.trim(),
             released: Released,
-            genre: Genre,
-            director: Director,
+            genre: Genre.trim(),
+            director: Director.trim(),
         }).save();
     }
 
-    async findUserMovies(id: number) {
-        return this.movieModel.find({ userId: id }).exec();
+    async findUserMovies(userId: number) {
+        return this.movieModel.find({ userId }).exec();
+    }
+
+    async findUserMovie(query: {
+        userId: number;
+        title?: string;
+        _id?: string;
+    }) {
+        return this.movieModel.findOne(query).exec();
     }
 }

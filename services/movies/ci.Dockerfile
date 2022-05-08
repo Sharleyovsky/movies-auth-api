@@ -8,4 +8,5 @@ RUN npm i --silent
 RUN npm run build
 
 CMD ["npm", "run", "test"]
+CMD ["npm", "run", "test:e2e"]
 CMD ["npm", "run", "start:prod"]
