@@ -71,6 +71,6 @@ export class MoviesService {
         title?: string;
         _id?: string;
     }) {
-        return this.movieModel.findOne(query);
+        return this.movieModel.findOne(query).exec();
     }
 }
