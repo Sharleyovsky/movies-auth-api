@@ -20,6 +20,10 @@ export class OmdbService {
             const { data } = await axios.get(`${this.url}&t=${title}`);
 
             if (data?.Response !== "False") {
+                if (data?.Released === "N/A") {
+                    data.Released = new Date(0);
+                }
+
                 return data;
             }
 
