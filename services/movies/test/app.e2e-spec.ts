@@ -26,6 +26,7 @@ describe("AppController (e2e)", () => {
             name: "John",
         },
     ];
+    const JWT_EXPIRATION_TIME = 60;
 
     const jwtPremiumMock = jwtService.sign(
         {
@@ -34,7 +35,7 @@ describe("AppController (e2e)", () => {
             role: premiumUser.role,
         },
         {
-            expiresIn: 60,
+            expiresIn: JWT_EXPIRATION_TIME,
         },
     );
     const jwtBasicMock = jwtService.sign(
@@ -44,7 +45,7 @@ describe("AppController (e2e)", () => {
             role: user.role,
         },
         {
-            expiresIn: 60,
+            expiresIn: JWT_EXPIRATION_TIME,
         },
     );
     const jwtMockWrongRole = jwtService.sign(
@@ -54,7 +55,7 @@ describe("AppController (e2e)", () => {
             role: "limited",
         },
         {
-            expiresIn: 60,
+            expiresIn: JWT_EXPIRATION_TIME,
         },
     );
 
